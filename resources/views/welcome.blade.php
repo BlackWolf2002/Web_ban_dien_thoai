@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartphone Store</title>
+
+    <link rel="stylesheet" href="/frontend/Tanvuong/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/frontend/js/scripts.js"></script>
+    <link rel="stylesheet" href="/frontend/css/style.css">
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        #MenuItems span{
+            padding:10px;
+        }
+        .add-cart{
+            position:absolute;
+            bottom: 0;
+            right: 0;
+            background:black;
+            color: white;
+            padding:5px;
+            cursor: pointer;
+        }
+        .add-cart:hover{
+            background-color:hsl(249,32%,17);
+        }
+        .col-4:hover{
+            border:1px solid black;
+        }
+        #logout-form{
+            position:absolute;
+            top:-50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="background-image">
+            <div class="container">
+                <div class="navbar">
+                    <div class="logo">
+                        <img src="/frontend/images/logoASMD.png" width="125px">
+                    </div>
+                    <nav>
+                        <div id="MenuItems">
+                            <span><a href="{{ url('/home') }}">Home</a></span>
+                            <span><a href="{{ url('/product') }}">Products</a></span>
+                            <span><a href="{{ url('/about') }}">About</a></span>
+                            <span><a href="{{ url('/contactus') }}">Contact</a></span>
+                            @if(Auth::check())
+                            <span><a href="{{ url('/account') }}">Account</a></span>
+                            <span><a href="{{ url('my-orders') }}">My Orders</a></span>
+                                @if(Auth::user()->role_id == 1)
+                                <span><a href="{{ url('/') }}">Admin Page</a></span>
+                                @endif
+                            @endif
+                           
+                            @guest
+                            @if (Route::has('login'))
+                                <span class="nav-item">
+                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                </span>
+                            @endif
+
+                            @if (Route::has('register'))
+                                <span class="nav-item">
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                </span>
+                            @endif
+
+
+
+                        @else
+                            <span class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }}
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </span>
+
+                        @endguest
+                        </div>
+                    </nav>
+                    @if(Auth::check())
+                        <a href="{{ url('cart/'.Auth::user()->id) }}"><img src="/frontend/images/shopping-cart.png" width="30px" height="55px" style="cursor:pointer;padding-left:10px;padding-right:0px; padding-bottom:30px" id="cart-icon"></a>
+                    @endif
+
+                    <img src="/frontend/images/menu.png" class="menu-icon"  onclick="menutoggle()">
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <h1>Where is the smartphone<br> you want to choose ?</h1>
+                        <p>Give yourself the coolest smartphone<br>you've ever known.</p>
+                        {{-- <p>{{ Auth::user()->cart->user_id }}</p> --}}
+                    </div>
+                    <a href="/product" class="btn">Explore Now &#8594;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+<!----- featured categories ----->
+    <div style="background-color: #eeeeee">
+        <div class="categories">
+            <div class="small-container">
+                <div class="row_part2">
+                    <div class="col-3">
+                        <img src="/frontend/Tanvuong/images/category-phone-1.png">
+                    </div>
+                    <div class="col-3">
+                        <img src="/frontend/Tanvuong/images/category-phone-2.png">
+                    </div>
+                    <div class="col-3">
+                        <img src="/frontend/Tanvuong/images/category-phone-3.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!---- featured products ---->
+    <div class="small-container">
+        <h2 class="title">Featured Products</h2>
+        <div class="row_part2">
+            @foreach($products as $product)
+            <div class="col-4">
+                <p><a href='{{ 'product_details/'.$product->id }}'><img src="{{ asset('/frontend/images/'.$product->picture_1)}}"></a></p>
+                <h4>{{ $product->name }}</h4>
+                <p>{{ $product->price }}VND</p>
+                <p>Kho: {{ $product->quantity }} </p>
+                @if($product->quantity > 0)
+                <p>In stock</p>
+            @else
+                <p>Out of stock</p>
+            @endif
+            </div>
+            @endforeach
+        </div>
+    </div>
+<!------ offer ------>
+    <div class="offer">
+        <div class="small-container">
+            <div class="row_part2">
+                @foreach ($products as $product)
+                @if($product->id == 3)
+                    <div class="col-2">
+                        <img src="{{ asset('/frontend/images/'.$product->picture_1)}}" class="offer-img">
+                    </div>
+                    <div class="col-2">
+                        <p>Exclusively Available on IphoneStore</p>
+                        <h1>{{ $product->name }}</h1>
+                        <small>
+                        {{ $product->description }}
+                        </small>
+                        <br><a href="{{ 'product_details/'.$product->id }}" class="btn">Buy Now &#8594;</a>
+                    </div>
+                @endif
+                @endforeach
+            </div>
+        </div>
+    </div>
+<!---- brands ---->
+    <div class="brands">
+        <div class="small-container">
+            <div class="row_part2">
+                <div class="col-5">
+                    <img src="/frontend/Tanvuong/images/logo-iphone.png">
+                </div>
+                <div class="col-5">
+                    <img src="/frontend/Tanvuong/images/xiaomi-logo.png">
+                </div>
+                <div class="col-5">
+                    <img src="/frontend/Tanvuong/images/logo-samsung.png">
+                </div>
+                <div class="col-5">
+                    <img src="/frontend/Tanvuong/images/logo-oppo.png">
+                </div>
+                <div class="col-5">
+                    <img src="/frontend/Tanvuong/images/logo-paypal.png">
+                </div>
+            </div>
+        </div>
+    </div>
+<!---- footer ---->
+    <div class="footer">
+        <div class="container">
+            <div class="row_part2">
+                <div class="footer-col-1">
+                    <h3>Download Our App</h3>
+                    <p>Download App for Android and IOS mobile phone.</p>
+                    <div class="app-logo">
+                        <img src="/frontend/Tanvuong/images/play-store.png">
+                        <img src="/frontend/Tanvuong/images/app-store.png">
+                    </div>
+                </div>
+                <div class="footer-col-2">
+                    <img src="/frontend/images/logoASM.png">
+                    <p>Our Purpose Is To Sustainably Make the Pleasure and Benefits of Smartphone Accessible to the Many.</p>
+                </div>
+                <div class="footer-col-3">
+                    <h3>Useful Links</h3>
+                    <ul>
+                        <li>Coupons</li>
+                        <li>Blog Post</li>
+                        <li>Return Policy</li>
+                        <li>Join Affiliate</li>
+                    </ul>
+                </div>
+                <div class="footer-col-4">
+                    <h3>Follow us</h3>
+                    <ul>
+                        <li>Facebook</li>
+                        <li>Twitter</li>
+                        <li>Instagram</li>
+                        <li>Youtube</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <p class="copyright">Copyright (©) 2022 Smartphone</p>
+        </div>
+    </div>
+</body>
+</html>
+

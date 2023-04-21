@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smartphone Store</title>
+    <link rel="stylesheet" href="style_login.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <script src="js/scripts.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="forms">
+        <div class="form Register">
+            <span class="title">Register</span>
+
+            <form action="#">
+                <div class="input-field">
+                    <input type="text" placeholder="Enter your user" require>
+                    <i class="uil uil-user"></i>
+                </div>
+                <div class="input-field">
+                    <input type="text" placeholder="Enter your email" require>
+                    <i class="uil uil-envelope"></i>
+                </div>
+                <div class="input-field">
+                    <input type="password" class="password" placeholder="Enter your password" require>
+                    <i class="uil uil-lock icon"></i>
+                </div>
+                <div class="input-field">
+                    <input type="password" class="password" placeholder="Confirm your password" require>
+                    <i class="uil uil-lock icon"></i>
+                    <i class="uil uil-eye-slash showHidePw"></i>
+                </div>
+                <div>
+                    <br>
+                    <i class="uil uil-venus"></i>
+                    <i class="uil uil-mars"></i>
+                    <label>Gender</label><br>
+                    <div class="col-md-6" style="margin-top:10px">
+                        <input type="radio" id="male" name="gender" value="1">
+                        <label for="male">Male</label>
+                        <input type="radio" id="female" name="gender" value="0">
+                        <label for="female">Female</label>
+                        <input type="radio" id="unknown" name="gender" value="2">
+                        <label for="unknown">Unknown</label><br>
+                    </div>
+                </div>
+                <div class="checkbox-text">
+                    <div class="checkbox-content">
+                        <input type="checkbox" id="logCheck">
+                        <label for="logCheck" class="text">Remember me</label>
+                    </div>
+
+                    <a href="#" class="text">Forgot password?</a>
+                </div>
+
+                <div class="input-field button">
+                    <input type="button" value="Register Now">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
